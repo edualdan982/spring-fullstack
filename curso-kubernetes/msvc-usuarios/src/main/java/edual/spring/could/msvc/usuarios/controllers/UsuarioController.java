@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuario")
@@ -22,32 +23,41 @@ public class UsuarioController {
         return usuarioService.listar();
     }
 
-    @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody Usuario usuario){
-        Map<String, Object> response = new HashMap<>();
-        response.put("usuario", usuarioService.guardar(usuario));
-        response.put("mensaje", "Se ha registro un usuario");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @PostMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id){
-        Map<String, Object> response = new HashMap<>();
-        response.put("usuario", usuarioService.findById(id));
-        response.put("mensaje", "Se ha registro un usuario");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        Optional<Usuario> usuarioOptional = usuarioService.findById(id);
+        if(usuarioOptional.isPresent()){
+            return ResponseEntity.ok(usuarioOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> guardar(@RequestBody Usuario usuario){
+      return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuario));
     }
 
     @PutMapping
-    public ResponseEntity<?> actualizar(@RequestBody Usuario usuario){
-        Map<String, Object> response = new HashMap<>();
-        if(usuario == null){
-            response.put("mensaje", "El usuario a actualizar es nulo");
-            return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<?> actualizar(@RequestBody Usuario usuario, @PathVariable Long id){
+        Optional<Usuario> usuarioActualizar = usuarioService.findById(id);
+        if(usuarioActualizar.isPresent()){
+            usuarioActualizar.get().setNombre(usuario.getNombre());
+            usuarioActualizar.get().setEmail(usuario.getEmail());
+            usuarioActualizar.get().setEstado(usuario.getEstado());
+            usuarioActualizar.get().setPassword(usuario.getPassword());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioActualizar.get()));
+        } else
+            return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id){
+        Optional<Usuario> o = usuarioService.findById(id);
+        if(o.isPresent()){
+            usuarioService.deleteById(id);
+            return  ResponseEntity.noContent().build();
         }
-        Usuario usuarioActualizar = usuarioService.findById(usuario.getId()).orElse(null);
-        response.put("usuario", usuarioService.guardar(usuario));
-        response.put("mensaje", "Se ha registro un usuario");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return  ResponseEntity.notFound().build();
     }
 }
