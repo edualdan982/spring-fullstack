@@ -1,6 +1,7 @@
 package edual.spring.could.msvc.cursos.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ public class Curso implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotEmpty
     private String nombre;
 
     public Long getId() {

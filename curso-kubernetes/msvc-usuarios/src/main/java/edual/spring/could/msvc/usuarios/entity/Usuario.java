@@ -2,24 +2,37 @@ package edual.spring.could.msvc.usuarios.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serializable;
 
 @Entity
-@Table(name="usuarios")
+@Table(name = "usuarios")
 public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String nombre;
 
+    @NotEmpty
+    @Email
     @Column(unique = true)
     private String email;
 
+    @NotBlank
     private String password;
 
     private Boolean estado;
+
+    @PrePersist
+    public void prePersist() {
+        if (estado == null)
+            this.estado = false;
+    }
 
     public Long getId() {
         return id;
