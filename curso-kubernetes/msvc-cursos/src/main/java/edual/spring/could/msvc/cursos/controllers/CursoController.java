@@ -1,6 +1,6 @@
 package edual.spring.could.msvc.cursos.controllers;
 
-import edual.spring.could.msvc.cursos.entity.Curso;
+import edual.spring.could.msvc.cursos.models.entity.Curso;
 import edual.spring.could.msvc.cursos.services.CursoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

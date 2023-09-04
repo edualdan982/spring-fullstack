@@ -15,4 +15,8 @@ public interface IUsuarioService {
     public Usuario guardar(Usuario usuario);
 
     public void deleteById(Long id);
+
+    public Integer contarEmail(String email);
+
+    public Optional<Usuario> findByEmail(String email);
 }

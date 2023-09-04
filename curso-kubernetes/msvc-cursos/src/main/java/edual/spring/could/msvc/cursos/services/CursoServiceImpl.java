@@ -1,6 +1,7 @@
 package edual.spring.could.msvc.cursos.services;
 
-import edual.spring.could.msvc.cursos.entity.Curso;
+import edual.spring.could.msvc.cursos.models.Usuario;
+import edual.spring.could.msvc.cursos.models.entity.Curso;
 import edual.spring.could.msvc.cursos.repositories.CursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,22 @@ public class CursoServiceImpl implements CursoService {
     @Override
     public void eliminar(Long id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public Optional<Usuario> asignarUsuario(Usuario usuario, Long id) {
+        return Optional.empty();
+    }
+    @Transactional
+    @Override
+    public Optional<Usuario> crearUsuario(Usuario usuario, Long id) {
+        return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoId) {
+        return Optional.empty();
     }
 }

@@ -41,4 +41,16 @@ public class UsuarioService implements  IUsuarioService {
     public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
     }
+
+    @Transactional
+    @Override
+    public Integer contarEmail(String email) {
+        return usuarioRepository.contarEmail(email);
+    }
+
+    @Transactional
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
 }
