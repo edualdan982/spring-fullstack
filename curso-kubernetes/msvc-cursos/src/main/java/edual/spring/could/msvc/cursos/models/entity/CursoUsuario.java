@@ -10,13 +10,12 @@ public class CursoUsuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(name="usuario_id", unique = true)
     private Long usuarioId;
 
     public CursoUsuario(){
-
     }
-
     public Long getId() {
         return id;
     }
@@ -40,6 +39,6 @@ public class CursoUsuario {
         if(!(obj instanceof CursoUsuario))
             return false;
         CursoUsuario o = (CursoUsuario) obj;
-        return this.id != null && (this.getId() == o.getId());
+        return this.usuarioId != null && this.usuarioId.equals(o.usuarioId);
     }
 }

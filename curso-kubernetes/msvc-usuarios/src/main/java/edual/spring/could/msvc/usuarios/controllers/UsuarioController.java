@@ -3,6 +3,8 @@ package edual.spring.could.msvc.usuarios.controllers;
 import edual.spring.could.msvc.usuarios.entity.Usuario;
 import edual.spring.could.msvc.usuarios.service.IUsuarioService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
+    private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
     private IUsuarioService usuarioService;
 
@@ -23,7 +26,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<?> detalle(@PathVariable Long id) {
+        log.info("Se esta consumiendo el controlador usuario-detalle...");
         Optional<Usuario> usuarioOptional = usuarioService.findById(id);
         if (usuarioOptional.isPresent()) {
             return ResponseEntity.ok(usuarioOptional.get());
@@ -32,12 +36,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody @Valid Usuario usuarioReq, BindingResult result) {
+    public ResponseEntity<?> crear(@RequestBody @Valid Usuario usuarioReq, BindingResult result) {
+        log.info("Se esta consumiendo el controlador usuario-crear...");
         usuarioReq.setId(null);
         if (result.hasErrors()) {
             return validar(result);
         }
-        if(usuarioService.findByEmail(usuarioReq.getEmail()).isPresent()){
+        if (usuarioService.findByEmail(usuarioReq.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioReq));
@@ -50,7 +55,7 @@ public class UsuarioController {
         }
         Optional<Usuario> usuarioActualizar = usuarioService.findById(id);
         if (usuarioActualizar.isPresent()) {
-            if(! usuario.getEmail().equalsIgnoreCase(usuarioActualizar.get().getEmail()) && usuarioService.findByEmail(usuario.getEmail()).isPresent()){
+            if (!usuario.getEmail().equalsIgnoreCase(usuarioActualizar.get().getEmail()) && usuarioService.findByEmail(usuario.getEmail()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
             }
             usuarioActualizar.get().setNombre(usuario.getNombre());
@@ -70,6 +75,11 @@ public class UsuarioController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+    
+    @GetMapping("/usuarios-por-curso")
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<Long> ids){
+        return ResponseEntity.ok(usuarioService.lisatarPorIds(ids));
     }
 
     private static ResponseEntity<Map<String, String>> validar(BindingResult result) {

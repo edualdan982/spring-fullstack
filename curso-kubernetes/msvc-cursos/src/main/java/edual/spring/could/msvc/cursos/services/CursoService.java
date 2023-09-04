@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface CursoService {
     public List<Curso> listar();
     public Optional<Curso> porId(Long id);
+    public Optional<Curso> porIdConUsuarios(Long id);
     public Curso guardar(Curso curso);
     public void eliminar(Long id);
     public Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoId);

@@ -19,21 +19,24 @@ public class Curso implements Serializable {
     private String nombre;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "curso_id", unique = true)
+    @JoinColumn(name = "curso_id")
     private List<CursoUsuario> cursoUsuarios;
 
     @Transient
     private List<Usuario> usuarios;
+
     public Curso() {
         this.cursoUsuarios = new ArrayList<>();
     }
 
-    public void addCursoUsuario(CursoUsuario cursoUsuario){
+    public void addCursoUsuario(CursoUsuario cursoUsuario) {
         cursoUsuarios.add(cursoUsuario);
     }
-    public void removeCursoUsuario(CursoUsuario cursoUsuario){
+
+    public void removeCursoUsuario(CursoUsuario cursoUsuario) {
         cursoUsuarios.remove(cursoUsuario);
     }
+
     public Long getId() {
         return id;
     }
@@ -48,5 +51,21 @@ public class Curso implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public List<CursoUsuario> getCursoUsuarios() {
+        return cursoUsuarios;
+    }
+
+    public void setCursoUsuarios(List<CursoUsuario> cursoUsuarios) {
+        this.cursoUsuarios = cursoUsuarios;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 }

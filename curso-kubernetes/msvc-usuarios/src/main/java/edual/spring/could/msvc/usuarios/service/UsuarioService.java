@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioService implements  IUsuarioService {
+public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
@@ -20,6 +20,7 @@ public class UsuarioService implements  IUsuarioService {
     public Usuario findByNombre(String nombre) {
         return usuarioRepository.findByNombre(nombre);
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<Usuario> listar() {
@@ -31,11 +32,13 @@ public class UsuarioService implements  IUsuarioService {
     public Optional<Usuario> findById(Long id) {
         return usuarioRepository.findById(id);
     }
+
     @Transactional
     @Override
     public Usuario guardar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
+
     @Transactional
     @Override
     public void deleteById(Long id) {
@@ -52,5 +55,11 @@ public class UsuarioService implements  IUsuarioService {
     @Override
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
+    }
+
+    @Transactional
+    @Override
+    public List<Usuario> lisatarPorIds(Iterable<Long> ids) {
+        return (List<Usuario>) usuarioRepository.findAllById(ids);
     }
 }
