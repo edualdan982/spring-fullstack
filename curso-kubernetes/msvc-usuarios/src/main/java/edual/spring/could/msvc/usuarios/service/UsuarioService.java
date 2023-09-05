@@ -1,5 +1,6 @@
 package edual.spring.could.msvc.usuarios.service;
 
+import edual.spring.could.msvc.usuarios.clients.CursoClienteRest;
 import edual.spring.could.msvc.usuarios.repositories.IUsuarioRepository;
 import edual.spring.could.msvc.usuarios.entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private IUsuarioRepository usuarioRepository;
+    @Autowired
+    private CursoClienteRest clientRest;
 
     @Transactional(readOnly = true)
     @Override
@@ -43,6 +46,7 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public void deleteById(Long id) {
         usuarioRepository.deleteById(id);
+        clientRest.eliminarCursoUsuarioPorId(id);
     }
 
     @Transactional
