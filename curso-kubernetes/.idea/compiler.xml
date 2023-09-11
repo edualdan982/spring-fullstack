@@ -8,13 +8,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="msvc-usuarios" />
         <module name="msvc-cursos" />
-        <module name="msvc-auth" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="msvc-auth" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="msvc-auth" options="-parameters" />
+      <module name="msvc-auth" options="" />
       <module name="msvc-cursos" options="-parameters" />
       <module name="msvc-usuarios" options="-parameters" />
     </option>
