@@ -9,3 +9,5 @@
 
 # Para levantar con un archio .env para variables de entorno
 - $> docker run -p 8001:8000 --env-file .\msvc-usuarios\.env -d --rm --name msvc-usuarios --network spring usuarios
+
+- $> docker run -p 8001:8001 --env-file ./msvc-usuarios/.env -d --rm --name msvc-usuarios --network spring usuarios

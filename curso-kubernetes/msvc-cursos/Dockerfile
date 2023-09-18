@@ -1,10 +1,30 @@
 #Elegimos una imagen como base para levantar el conenedor
-FROM openjdk:17.0.2
+FROM openjdk:17-jdk-alpine as builder
 #Configuramos el la direccion de trabajo, este el contexto de la ruta
+WORKDIR /app/msvc-cursos
+COPY ./pom.xml /app
+
+COPY ./msvc-cursos/.mvn ./.mvn
+COPY ./msvc-cursos/mvnw .
+COPY ./msvc-cursos/pom.xml .
+
+#ESTE COMANDO SOLO HA SIDO NECESARIO PARA CONVERTIR EL FORMATO DEL FICHERO MVNW DE WINDOWS A LINUX, SINO FALLABA
+RUN sed -i -e 's/\r$//' ./mvnw
+
+RUN ./mvnw clean package -Dmaven.test.skip -Dmaven.main.skip -Dspring-boot.repackage.skip && rm -r ./target/
+#RUN ./mvnw dependency:go-offline
+
+COPY ./msvc-cursos/src ./src
+
+RUN ./mvnw clean package -DskipTests
+
+
+FROM openjdk:17-jdk-alpine
+
 WORKDIR /app
-
-COPY ./target/msvc-cursos-0.0.1-SNAPSHOT.jar .
-
+RUN mkdir ./logs
+COPY --from=builder /app/msvc-cursos/target/msvc-cursos-0.0.1-SNAPSHOT.jar .
 EXPOSE 8002
 
-ENTRYPOINT [ "java", "-jar", "msvc-cursos-0.0.1-SNAPSHOT.jar"]
+# ENTRYPOINT [ "java", "-jar", "msvc-cursos-0.0.1-SNAPSHOT.jar"]
+CMD [ "java", "-jar", "msvc-cursos-0.0.1-SNAPSHOT.jar"]
