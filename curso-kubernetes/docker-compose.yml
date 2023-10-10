@@ -27,10 +27,10 @@ services:
     networks:
       - spring
   msvc-usuarios:
-    image: usuarios:comp
-    build:
-      context: ./
-      dockerfile: ./msvc-usuarios/Dockerfile
+    image: edualdan982/usuarios:latest
+    # build:
+    #   context: ./
+    #   dockerfile: ./msvc-usuarios/Dockerfile
     container_name: msvc-usuarios
     ports:
       - "8001:8001"
@@ -42,10 +42,10 @@ services:
       - mysql8
     restart: always
   msvc-cursos:
-    image: cursos:comp
-    build:
-      context: ./
-      dockerfile: ./msvc-cursos/Dockerfile
+    image: edualdan982/cursos:latest
+    # build:
+    #   context: ./
+    #   dockerfile: ./msvc-cursos/Dockerfile
     container_name: msvc-cursos
     ports:
       - "8002:8002"
