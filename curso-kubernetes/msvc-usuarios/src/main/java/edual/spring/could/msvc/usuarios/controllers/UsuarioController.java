@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,19 @@ public class UsuarioController {
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
     private IUsuarioService usuarioService;
+
+    @Autowired
+    private ApplicationContext context;
+
+    @GetMapping("/crash")
+    public void crash() {
+        ((ConfigurableApplicationContext) context).close();
+    }
+
+    @GetMapping("/info")
+    public String info() {
+        return "Esta arriba el servicio msvc-usuarios";
+    }
 
     @GetMapping
     public Map<String, List<Usuario>> listar() {
@@ -43,20 +58,24 @@ public class UsuarioController {
             return validar(result);
         }
         if (usuarioService.findByEmail(usuarioReq.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioReq));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@Valid @RequestBody Usuario usuario, BindingResult result, @PathVariable Long id) {
+    public ResponseEntity<?> actualizar(@Valid @RequestBody Usuario usuario, BindingResult result,
+            @PathVariable Long id) {
         if (result.hasErrors()) {
             return validar(result);
         }
         Optional<Usuario> usuarioActualizar = usuarioService.findById(id);
         if (usuarioActualizar.isPresent()) {
-            if (!usuario.getEmail().equalsIgnoreCase(usuarioActualizar.get().getEmail()) && usuarioService.findByEmail(usuario.getEmail()).isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
+            if (!usuario.getEmail().equalsIgnoreCase(usuarioActualizar.get().getEmail())
+                    && usuarioService.findByEmail(usuario.getEmail()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
             }
             usuarioActualizar.get().setNombre(usuario.getNombre());
             usuarioActualizar.get().setEmail(usuario.getEmail());
@@ -76,9 +95,9 @@ public class UsuarioController {
         }
         return ResponseEntity.notFound().build();
     }
-    
+
     @GetMapping("/usuarios-por-curso")
-    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<Long> ids){
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<Long> ids) {
         return ResponseEntity.ok(usuarioService.lisatarPorIds(ids));
     }
 
