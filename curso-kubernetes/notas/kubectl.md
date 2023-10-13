@@ -64,7 +64,7 @@ kubectl apply -f .\${name_file}.yaml
 kubectl create deployment ${nombre_deploy} --image=USUARIO/NOMBRE_REPO --port=NRO_PUERTO
 ```
 
-#### Para poder generar una ip del cluster con minikube, que es propio de minikube
+### Para poder generar una ip del cluster con minikube, que es propio de minikube
 ```bash
 minikube service msvc-usuarios --url
 ```
@@ -73,7 +73,6 @@ minikube service msvc-usuarios --url
 ```bash
 kubectl set image deployment ${nombre_deploy} usuarios=REPO_USER/REPO:TAG
 ```
-
 
 #### Para escalar un deploy con un tipo de red 'LoadBalancer'
 ```bash

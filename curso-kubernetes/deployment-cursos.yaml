@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: msvc-cursos
+  name: msvc-cursos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: msvc-cursos
+  template:
+    metadata:
+      labels:
+        app: msvc-cursos
+    spec:
+      containers:
+      - image: edualdan982/cursos:latest
+        name: cursos
+        ports: 
+        - containerPort: 8002
+        # resources: {}
+        env:
+          - name: DB_HOST
+            value: "postgres13:5432"
+          - name: DB_USERNAME
+            value: "postgres"
+          - name: DB_PASSWORD
+            value: "pelota12"
