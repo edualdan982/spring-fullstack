@@ -101,3 +101,8 @@ kubectl delete deployment ${nombre}
 ```bash
 kubectl delete -f .\deployment-usuarios.yaml
 ```
+
+#### Para listar los volumenes
+```bash
+kubectl get sc
+```
