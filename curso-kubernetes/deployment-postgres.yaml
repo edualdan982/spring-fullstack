@@ -13,25 +13,25 @@ spec:
         app: postgres13
     spec:
       containers:
-      - name: postgres13
-        image: postgres:13
-        ports:
-        - containerPort: 5432
-        env:
-          - name: POSTGRES_PASSWORD
-            value: "pelota12"
-          - name: POSTGRES_DB
-            value: "msvc_cursos"
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
-        volumeMounts:
-          - name: data-postgres
-            mountPath: /var/lib/postgresql/data
+        - name: postgres13
+          image: postgres:13
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "pelota12"
+            - name: POSTGRES_DB
+              value: "msvc_cursos"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: data-postgres
+              mountPath: /var/lib/postgresql/data
       volumes:
         - name: data-postgres
           hostPath:
