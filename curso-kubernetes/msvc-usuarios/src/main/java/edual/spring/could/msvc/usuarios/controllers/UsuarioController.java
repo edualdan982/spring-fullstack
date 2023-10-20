@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,9 +22,10 @@ public class UsuarioController {
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
     private IUsuarioService usuarioService;
-
     @Autowired
     private ApplicationContext context;
+    @Autowired
+    private Environment env;
 
     @GetMapping("/crash")
     public void crash() {
@@ -36,12 +38,16 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public Map<String, List<Usuario>> listar() {
-        return Collections.singletonMap("users", usuarioService.listar());
+    public ResponseEntity<Map<String, Object>> listar() {
+        Map<String, Object> body = new HashMap<>();
+        body.put("podinfo", env.getProperty("MY_POD_NAME")+": "+env.getProperty("MY_POD_IP"));
+        body.put("users", usuarioService.listar());
+        body.put("texto", env.getProperty("config.texto"));
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> detalle(@PathVariable Long id) {
+    public ResponseEntity<Object> detalle(@PathVariable Long id) {
         log.info("Se esta consumiendo el controlador usuario-detalle...");
         Optional<Usuario> usuarioOptional = usuarioService.findById(id);
         if (usuarioOptional.isPresent()) {

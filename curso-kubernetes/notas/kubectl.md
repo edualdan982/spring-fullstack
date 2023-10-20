@@ -106,3 +106,8 @@ kubectl delete -f .\deployment-usuarios.yaml
 ```bash
 kubectl get sc
 ```
+
+#### Para darle permiso al spring-cloud en kubectl
+```bash
+kubectl create clusterrolebinding admin --clusterrole=cluster-admin --serviceaccount=default:default
+```
