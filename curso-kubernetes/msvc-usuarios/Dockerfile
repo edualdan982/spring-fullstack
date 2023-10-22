@@ -24,6 +24,7 @@ COPY ./$MSVC_NAME/src ./src
 
 RUN ./mvnw clean package -DskipTests
 
+#------------------------------------------------------------------------------------------------------------------
 #-----------------SEGUNDO STAGE------------------
 FROM openjdk:17-jdk-alpine
 
