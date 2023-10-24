@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/usuario")
 public class UsuarioController {
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
@@ -40,7 +39,7 @@ public class UsuarioController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> listar() {
         Map<String, Object> body = new HashMap<>();
-        body.put("podinfo", env.getProperty("MY_POD_NAME")+": "+env.getProperty("MY_POD_IP"));
+        body.put("podinfo", env.getProperty("MY_POD_NAME") + ": " + env.getProperty("MY_POD_IP"));
         body.put("users", usuarioService.listar());
         body.put("texto", env.getProperty("config.texto"));
         return ResponseEntity.ok(body);
@@ -113,5 +112,10 @@ public class UsuarioController {
             errores.put(err.getField(), String.format("El campo %s %s", err.getField(), err.getDefaultMessage()));
         });
         return ResponseEntity.badRequest().body(errores);
+    }
+
+    @GetMapping("/autorized")
+    public Map<String, Object> autorized(@RequestParam String code) {
+        return Collections.singletonMap("code", code);
     }
 }
