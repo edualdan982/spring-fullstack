@@ -23,5 +23,3 @@ Ejemplo de repuesta minikube:
 ```bash
   minikube config set driver hyperv
 ```
-
-
