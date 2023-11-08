@@ -5,7 +5,7 @@ metadata:
     app: msvc-auth
   name: msvc-auth
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: msvc-auth
