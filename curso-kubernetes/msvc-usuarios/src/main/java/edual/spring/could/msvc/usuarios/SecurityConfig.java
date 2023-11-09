@@ -13,14 +13,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-
+  private static final String SCOPE_WRITE = "SCOPE_write"; 
+  private static final String SCOPE_READ = "SCOPE_read"; 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-      httpSecurity.authorizeHttpRequests().requestMatchers("/autorized").permitAll().requestMatchers(HttpMethod.GET, "/")
-              .hasAnyAuthority("SCOPE_read", "SCOPE_write")
-              .requestMatchers(HttpMethod.POST, "/").hasAuthority("SCOPE_write")
-              .requestMatchers(HttpMethod.PUT, "/{id}").hasAuthority("SCOPE_write")
-              .requestMatchers(HttpMethod.DELETE, "/").hasAuthority("SCOPE_write")
+      httpSecurity.authorizeHttpRequests().requestMatchers("/autorized", "/actuator/**").permitAll()
+              .requestMatchers(HttpMethod.GET, "/")
+              .hasAnyAuthority(SCOPE_READ, SCOPE_WRITE)
+              .requestMatchers(HttpMethod.POST, "/").hasAuthority(SCOPE_WRITE)
+              .requestMatchers(HttpMethod.PUT, "/{id}").hasAuthority(SCOPE_WRITE)
+              .requestMatchers(HttpMethod.DELETE, "/").hasAuthority(SCOPE_WRITE)
               .anyRequest().authenticated()
               .and().sessionManagement(
               management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

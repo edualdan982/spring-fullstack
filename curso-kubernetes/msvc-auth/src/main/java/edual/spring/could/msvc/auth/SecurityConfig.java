@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,12 +59,10 @@ public class SecurityConfig {
         // Redirect to the login page when not authenticated from the
         // authorization endpoint
         .exceptionHandling((exceptions) -> exceptions
-            .defaultAuthenticationEntryPointFor(
-                new LoginUrlAuthenticationEntryPoint("/login"),
-                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)))
+            .authenticationEntryPoint(
+                new LoginUrlAuthenticationEntryPoint("/login")))
         // Accept access tokens for User Info and/or Client Registration
-        .oauth2ResourceServer((resourceServer) -> resourceServer
-            .jwt(Customizer.withDefaults()));
+        .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
     return http.build();
   }
@@ -100,13 +99,15 @@ public class SecurityConfig {
         .clientId("usuarios-client")
         .clientSecret("{noop}secret")
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
         .redirectUri(env.getProperty("LB_USUARIOS_URI") + "/login/oauth2/code/msvc-usuarios-client")
-        .postLogoutRedirectUri(env.getProperty("LB_USUARIOS_URI") + "/autorized")
+        .redirectUri(env.getProperty("LB_USUARIOS_URI") + "/autorized")
         .scope(OidcScopes.OPENID)
-        .scope("read")
-        .scope("write")
+				.scope(OidcScopes.PROFILE)
+				.scope("message.read")
+				.scope("message.write")
         // .scope(OidcScopes.PROFILE)
         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
         .build();
