@@ -17,7 +17,7 @@ public class SecurityConfig {
   private static final String SCOPE_READ = "SCOPE_read"; 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-      httpSecurity.authorizeHttpRequests().requestMatchers("/autorized", "/actuator/**").permitAll()
+      httpSecurity.authorizeHttpRequests().requestMatchers("/authorized", "/actuator/**").permitAll()
               .requestMatchers(HttpMethod.GET, "/")
               .hasAnyAuthority(SCOPE_READ, SCOPE_WRITE)
               .requestMatchers(HttpMethod.POST, "/").hasAuthority(SCOPE_WRITE)

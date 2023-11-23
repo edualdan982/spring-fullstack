@@ -114,7 +114,7 @@ public class UsuarioController {
         return ResponseEntity.badRequest().body(errores);
     }
 
-    @GetMapping("/autorized")
+    @GetMapping("/authorized")
     public Map<String, Object> autorized(@RequestParam String code) {
         return Collections.singletonMap("code", code);
     }
