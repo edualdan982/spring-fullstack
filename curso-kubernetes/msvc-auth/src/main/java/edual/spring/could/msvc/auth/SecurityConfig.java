@@ -97,17 +97,17 @@ public class SecurityConfig {
         .clientId("usuarios-client")
         .clientSecret("{noop}secret")
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+        .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
         .redirectUri(env.getProperty("LB_USUARIOS_URI") + "/login/oauth2/code/msvc-usuarios-client")
         .redirectUri(env.getProperty("LB_USUARIOS_URI") + "/authorized")
         .scope(OidcScopes.OPENID)
-				.scope(OidcScopes.PROFILE)
-				.scope("message.read")
-				.scope("message.write")
+        .scope(OidcScopes.PROFILE)
+        .scope("message.read")
+        .scope("message.write")
         // .scope(OidcScopes.PROFILE)
-        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
         .build();
 
     return new InMemoryRegisteredClientRepository(oidcClient);
@@ -115,7 +115,6 @@ public class SecurityConfig {
 
   @Bean
   public JWKSource<SecurityContext> jwkSource() {
-    // Estoy suponiendo que este genera un clave
     KeyPair keyPair = generateRsaKey();
     RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
     RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
