@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-AuthServerDemoApplication<auth-server-demo>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.scurity.authserverdemo.AuthServerDemoApplication",
+      "projectName": "auth-server-demo",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-HelloSecurityApplication<hello-security>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.security.hellosecurity.HelloSecurityApplication",
+      "projectName": "hello-security",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
