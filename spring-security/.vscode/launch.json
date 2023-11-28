@@ -18,6 +18,47 @@
       "mainClass": "com.security.hellosecurity.HelloSecurityApplication",
       "projectName": "hello-security",
       "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=51601 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=hello-security"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-AuthServerDemoApplication<auth-server-demo>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.security.authserverdemo.AuthServerDemoApplication",
+      "projectName": "auth-server-demo",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-AuthClientDemoApplication<auth-client-demo>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.security.authclientdemo.AuthClientDemoApplication",
+      "projectName": "auth-client-demo",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-AuthServerPkceApplication<auth-server-pkce>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.security.authserverpkce.AuthServerPkceApplication",
+      "projectName": "auth-server-pkce",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-AuthClientSocialApplication<auth-client-social>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.security.authclientsocial.AuthClientSocialApplication",
+      "projectName": "auth-client-social",
+      "args": "",
       "envFile": "${workspaceFolder}/.env"
     }
   ]
