@@ -1,0 +1,23 @@
+github:
+  base-url: https://github.com/login
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          oauth2-client:
+            provider: github
+            client-id: 5cd884ffa4f8a4c9cbbc
+            client-secret: b9994c3c4771a577cbf4119c2dc9213743693441
+            scope:
+              - read
+              # - profile
+              # - email
+        provider:
+          github:
+            authorization-uri: ${github.base-url}/oauth/authorize
+            # token-uri: ${github.base-url}/oauth/token
+            # user-info-uri: ${github.base-url}/oauth/userinfo
+            # jwk-set-uri: ${github.base-url}/oauth/keys
+            # user-name-attribute: sub
