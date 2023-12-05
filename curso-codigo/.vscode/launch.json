@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-MsvcAuthApplication<msvc-auth>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "org.aguzman.springcloud.msvc.auth.MsvcAuthApplication",
+      "projectName": "msvc-auth",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

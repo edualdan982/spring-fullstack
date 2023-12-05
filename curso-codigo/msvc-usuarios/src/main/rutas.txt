@@ -1,0 +1,1 @@
+http://172.20.28.49:32466/oauth2/authorization/msvc-usuarios-client

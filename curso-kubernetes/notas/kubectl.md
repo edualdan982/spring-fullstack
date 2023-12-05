@@ -111,3 +111,29 @@ kubectl get sc
 ```bash
 kubectl create clusterrolebinding admin --clusterrole=cluster-admin --serviceaccount=default:default
 ```
+
+Para eliminar todos los recursos en un cluster de Kubernetes con kubectl, puedes usar el comando delete con el flag --all. Aquí te dejo un ejemplo de cómo hacerlo para diferentes tipos de recursos:
+
+#### Eliminar todos los pods
+```bash
+kubectl delete pods --all
+```
+
+#### Eliminar todos los servicios
+```bash
+kubectl delete services --all
+```
+
+#### Eliminar todos los deployments
+```bash
+kubectl delete deployments --all
+```
+
+Por favor, ten en cuenta que este comando eliminará todos los recursos del espacio de nombres actual. Si quieres eliminar todos los recursos en todos los espacios de nombres, puedes usar el flag --all-namespaces.
+
+#### Eliminar todos los recursos en todos los espacios de nombres
+```bash 
+kubectl delete pods,services,deployments --all --all-namespaces
+```
+Advertencia: Este comando eliminará todos tus recursos de Kubernetes, así que úsalo con precaución. Asegúrate de entender completamente lo que este comando hace antes de ejecutarlo.
+

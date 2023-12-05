@@ -6,6 +6,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -22,7 +24,7 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorize -> authorize
         .requestMatchers("/authorized", "/login", "/actuator/**").permitAll()
-        .requestMatchers(HttpMethod.GET, "/", "/{id}").hasAnyAuthority(SCOPE_WRITE, SCOPE_WRITE)
+        .requestMatchers(HttpMethod.GET, "/", "/{id}").hasAnyAuthority(SCOPE_WRITE, SCOPE_READ)
         .requestMatchers(HttpMethod.POST, "/").hasAuthority(SCOPE_WRITE)
         .requestMatchers(HttpMethod.PUT, "/{id}").hasAuthority(SCOPE_WRITE)
         .requestMatchers(HttpMethod.DELETE, "/{id}").hasAuthority(SCOPE_WRITE)
@@ -30,9 +32,8 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .oauth2Login(login -> login.loginPage("/oauth2/authorization/msvc-usuarios-client"))
         .oauth2Client(Customizer.withDefaults())
-        .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
-        .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer
-            .jwt(Customizer.withDefaults()));
+        // .csrf(AbstractHttpConfigurer::disable)
+        .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
     return http.build();
   }
