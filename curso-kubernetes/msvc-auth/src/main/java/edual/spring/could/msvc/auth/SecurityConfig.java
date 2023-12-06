@@ -104,8 +104,8 @@ public class SecurityConfig {
         .redirectUri(env.getProperty("LB_USUARIOS_URI") + "/authorized")
         .scope(OidcScopes.OPENID)
         .scope(OidcScopes.PROFILE)
-        .scope("message.read")
-        .scope("message.write")
+        .scope("read")
+        .scope("write")
         .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
         .build();
 

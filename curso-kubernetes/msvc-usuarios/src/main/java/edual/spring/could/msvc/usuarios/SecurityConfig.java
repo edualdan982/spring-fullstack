@@ -7,11 +7,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @Configuration
@@ -32,31 +29,9 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .oauth2Login(login -> login.loginPage("/oauth2/authorization/msvc-usuarios-client"))
         .oauth2Client(Customizer.withDefaults())
-        // .csrf(AbstractHttpConfigurer::disable)
-        .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+        .csrf(AbstractHttpConfigurer::disable)
+        .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
 
     return http.build();
   }
-  /*
-   * @Bean
-   * SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws
-   * Exception {
-   * httpSecurity.authorizeHttpRequests().requestMatchers("/authorized",
-   * "/actuator/**").permitAll()
-   * .requestMatchers(HttpMethod.GET, "/")
-   * .hasAnyAuthority(SCOPE_READ, SCOPE_WRITE)
-   * .requestMatchers(HttpMethod.POST, "/").hasAuthority(SCOPE_WRITE)
-   * .requestMatchers(HttpMethod.PUT, "/{id}").hasAuthority(SCOPE_WRITE)
-   * .requestMatchers(HttpMethod.DELETE, "/").hasAuthority(SCOPE_WRITE)
-   * .anyRequest().authenticated()
-   * .and().sessionManagement(
-   * management ->
-   * management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-   * .oauth2Login(oauth2Login ->
-   * oauth2Login.loginPage("/oauth2/authorization/msvc-usuarios-client"))
-   * .oauth2Client(withDefaults())
-   * .oauth2ResourceServer(server -> server.jwt());
-   * return httpSecurity.build();
-   * }
-   */
 }
