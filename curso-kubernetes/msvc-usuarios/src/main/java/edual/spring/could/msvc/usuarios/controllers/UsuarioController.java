@@ -36,7 +36,7 @@ public class UsuarioController {
         return "Esta arriba el servicio msvc-usuarios";
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Map<String, Object>> listar() {
         Map<String, Object> body = new HashMap<>();
         body.put("podinfo", env.getProperty("MY_POD_NAME") + ": " + env.getProperty("MY_POD_IP"));
