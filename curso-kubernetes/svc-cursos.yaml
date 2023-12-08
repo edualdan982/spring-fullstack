@@ -10,3 +10,4 @@ spec:
   selector:
     app: msvc-cursos
   type: LoadBalancer
+  # loadBalancerIP: 172.19.20.20

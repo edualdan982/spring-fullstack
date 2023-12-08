@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +22,13 @@ public class UsuarioController {
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
     private IUsuarioService usuarioService;
+    
     @Autowired
     private ApplicationContext context;
     @Autowired
     private Environment env;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/crash")
     public void crash() {
@@ -66,6 +70,7 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Collections.singletonMap("mensaje", "El email ya esta en uso."));
         }
+        usuarioReq.setPassword(passwordEncoder.encode(usuarioReq.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioReq));
     }
 
@@ -85,7 +90,7 @@ public class UsuarioController {
             usuarioActualizar.get().setNombre(usuario.getNombre());
             usuarioActualizar.get().setEmail(usuario.getEmail());
             usuarioActualizar.get().setEstado(usuario.getEstado());
-            usuarioActualizar.get().setPassword(usuario.getPassword());
+            usuarioActualizar.get().setPassword(passwordEncoder.encode(usuario.getPassword()));
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioActualizar.get()));
         } else
             return ResponseEntity.notFound().build();

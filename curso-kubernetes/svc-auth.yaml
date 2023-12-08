@@ -10,3 +10,4 @@ spec:
   selector:
     app: msvc-auth
   type: LoadBalancer
+  # loadBalancerIP: 172.19.20.10

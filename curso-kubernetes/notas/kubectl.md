@@ -112,6 +112,16 @@ kubectl get sc
 kubectl create clusterrolebinding admin --clusterrole=cluster-admin --serviceaccount=default:default
 ```
 
+El comando kubectl create clusterrolebinding admin --clusterrole=cluster-admin --serviceaccount=default:default realiza lo siguiente:
+
+kubectl create clusterrolebinding admin: Crea un ClusterRoleBinding llamado admin. Un ClusterRoleBinding es un objeto que otorga permisos definidos en un ClusterRole a usuarios, grupos o ServiceAccounts1.
+
+--clusterrole=cluster-admin: Especifica que el ClusterRole asociado es cluster-admin, que es un rol predefinido en Kubernetes que otorga permisos completos sobre todos los recursos y objetos dentro del clúster1.
+
+--serviceaccount=default:default: Asigna el ClusterRoleBinding a la cuenta de servicio default en el espacio de nombres default. Las cuentas de servicio son utilizadas por los procesos de los pods para interactuar con la API de Kubernetes1.
+
+Por lo tanto, este comando otorga a la cuenta de servicio default en el espacio de nombres default todos los permisos sobre todos los recursos y objetos dentro del clúster. Esto puede ser útil para tareas de administración, pero también puede ser un riesgo de seguridad si la cuenta de servicio se utiliza de manera inapropiada o se ve comprometida1.
+
 Para eliminar todos los recursos en un cluster de Kubernetes con kubectl, puedes usar el comando delete con el flag --all. Aquí te dejo un ejemplo de cómo hacerlo para diferentes tipos de recursos:
 
 #### Eliminar todos los pods
