@@ -16,13 +16,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class UsuarioController {
     private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
     @Autowired
     private IUsuarioService usuarioService;
-    
+
     @Autowired
     private ApplicationContext context;
     @Autowired
@@ -123,4 +125,16 @@ public class UsuarioController {
     public Map<String, Object> autorized(@RequestParam String code) {
         return Collections.singletonMap("code", code);
     }
+
+    @GetMapping("/login")
+    public ResponseEntity<Object> loginByEmail(@RequestParam(name = "email") String email) {
+
+        Optional<Usuario> o = usuarioService.findByEmail(email);
+        if (o.isPresent()) {
+            return ResponseEntity.ok(o.get());
+        } else
+            return ResponseEntity.notFound().build();
+
+    }
+
 }

@@ -12,12 +12,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -45,6 +47,13 @@ public class SecurityConfig {
 
   @Autowired
   private Environment env;
+  @Autowired
+  private UserDetailsService userDetailsService;
+
+  @Bean
+  public static BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
   @Bean
   @Order(1)
@@ -79,23 +88,29 @@ public class SecurityConfig {
     return http.build();
   }
 
-  @Bean
-  public UserDetailsService userDetailsService() {
-    // Vamos a modificar para que este consuma desde el msvc-usuarios
-    UserDetails userDetails = User.withDefaultPasswordEncoder()
-        .username("user")
-        .password("password")
-        .roles("USER")
-        .build();
-
-    return new InMemoryUserDetailsManager(userDetails);
+  @Autowired
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
+ // @formatter:off
+  // @Bean
+  // public UserDetailsService userDetailsService() {
+  //   // Vamos a modificar para que este consuma desde el msvc-usuarios
+  //   UserDetails userDetails = User.withDefaultPasswordEncoder()
+  //       .username("user")
+  //       .password("password")
+  //       .roles("USER")
+  //       .build();
+  //   return new InMemoryUserDetailsManager(userDetails);
+  // }
+ // @formatter:on
 
   @Bean
   public RegisteredClientRepository registeredClientRepository() {
     RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
         .clientId("usuarios-client")
-        .clientSecret("{noop}secret")
+        // .clientSecret("{noop}secret")
+         .clientSecret(passwordEncoder().encode("secret"))
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
