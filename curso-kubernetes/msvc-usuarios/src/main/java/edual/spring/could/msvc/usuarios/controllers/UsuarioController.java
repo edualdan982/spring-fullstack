@@ -61,7 +61,7 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<?> crear(@RequestBody @Valid Usuario usuarioReq, BindingResult result) {
         log.info("Se esta consumiendo el controlador usuario-crear...");
         usuarioReq.setId(null);

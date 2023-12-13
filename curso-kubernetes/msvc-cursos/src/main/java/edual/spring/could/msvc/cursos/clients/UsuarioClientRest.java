@@ -13,12 +13,14 @@ import java.util.List;
 )
 public interface UsuarioClientRest {
 
-    @GetMapping("/usuario/{id}")
-    Usuario detalle(@PathVariable Long id);
+    @GetMapping("/{id}")
+    Usuario detalle(@PathVariable Long id, @RequestHeader(value = "Authorization", required = true) String token);
 
-    @PostMapping("/usuario")
-    Usuario crear(@RequestBody Usuario usuarioReq);
+    @PostMapping("/")
+    Usuario crear(@RequestBody Usuario usuarioReq,
+            @RequestHeader(value = "Authorization", required = true) String token);
 
-    @GetMapping("/usuario/usuarios-por-curso")
-    List<Usuario> obtenerAlumnosPorCurso(@RequestParam Iterable<Long> ids);
+    @GetMapping("/usuarios-por-curso")
+    List<Usuario> obtenerAlumnosPorCurso(@RequestParam Iterable<Long> ids,
+            @RequestHeader(value = "Authorization", required = true) String token);
 }

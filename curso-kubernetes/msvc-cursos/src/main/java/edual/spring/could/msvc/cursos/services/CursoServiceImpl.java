@@ -38,15 +38,16 @@ public class CursoServiceImpl implements CursoService {
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Curso> porIdConUsuarios(Long id) {
+    public Optional<Curso> porIdConUsuarios(Long id, String token) {
         Optional<Curso> o = repository.findById(id);
         if (o.isPresent()) {
             log.info("Se ha encontrado el curso {}", id);
             Curso curso = o.get();
             if (!curso.getCursoUsuarios().isEmpty()) {
-                List<Long> ids = curso.getCursoUsuarios().stream().map(cu -> cu.getUsuarioId()).collect(Collectors.toList());
+                List<Long> ids = curso.getCursoUsuarios().stream().map(cu -> cu.getUsuarioId())
+                        .collect(Collectors.toList());
                 log.info("Se han convertido los ids {}", ids.toString());
-                List<Usuario> usuarios = usuarioClientRest.obtenerAlumnosPorCurso(ids);
+                List<Usuario> usuarios = usuarioClientRest.obtenerAlumnosPorCurso(ids, token);
                 log.info("Cantidad de usuarios: {}", usuarios.size());
                 curso.setUsuarios(usuarios);
             }
@@ -75,14 +76,13 @@ public class CursoServiceImpl implements CursoService {
 
     @Transactional
     @Override
-    public Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoId) {
+    public Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoId, String token) {
         Optional<Curso> o = repository.findById(cursoId);
         if (o.isPresent()) {
-            Usuario usuarioMsvc = usuarioClientRest.detalle(usuario.getId());
+            Usuario usuarioMsvc = usuarioClientRest.detalle(usuario.getId(), token);
             Curso curso = o.get();
             CursoUsuario cursoUsuario = new CursoUsuario();
             cursoUsuario.setUsuarioId(usuarioMsvc.getId());
-
 
             curso.addCursoUsuario(cursoUsuario);
             repository.save(curso);
@@ -94,10 +94,10 @@ public class CursoServiceImpl implements CursoService {
 
     @Transactional
     @Override
-    public Optional<Usuario> crearUsuario(Usuario usuario, Long cursoId) {
+    public Optional<Usuario> crearUsuario(Usuario usuario, Long cursoId, String token) {
         Optional<Curso> o = repository.findById(cursoId);
         if (o.isPresent()) {
-            Usuario usuarioNuevoMsvc = usuarioClientRest.crear(usuario);
+            Usuario usuarioNuevoMsvc = usuarioClientRest.crear(usuario, token);
             Curso curso = o.get();
             CursoUsuario cursoUsuario = new CursoUsuario();
             cursoUsuario.setUsuarioId(usuarioNuevoMsvc.getId());
@@ -112,11 +112,11 @@ public class CursoServiceImpl implements CursoService {
 
     @Transactional
     @Override
-    public Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoId) {
+    public Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoId, String token) {
         log.info("Removiendo el usuario {} del curso: {}", usuario.getId(), cursoId);
         Optional<Curso> o = repository.findById(cursoId);
         if (o.isPresent()) {
-            Usuario usuarioNuevoMsvc = usuarioClientRest.detalle(usuario.getId());
+            Usuario usuarioNuevoMsvc = usuarioClientRest.detalle(usuario.getId(), token);
             Curso curso = o.get();
             CursoUsuario cursoUsuario = new CursoUsuario();
             cursoUsuario.setUsuarioId(usuarioNuevoMsvc.getId());

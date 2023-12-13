@@ -20,18 +20,18 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http.authorizeHttpRequests(authorize -> authorize
-        .requestMatchers("/authorized", "/login", "/actuator/**").permitAll()
-        .requestMatchers(HttpMethod.GET, "/", "/{id}").hasAnyAuthority(SCOPE_WRITE, SCOPE_READ)
-        .requestMatchers(HttpMethod.POST, "/").hasAuthority(SCOPE_WRITE)
-        .requestMatchers(HttpMethod.PUT, "/{id}").hasAuthority(SCOPE_WRITE)
-        .requestMatchers(HttpMethod.DELETE, "/{id}").hasAuthority(SCOPE_WRITE)
-        .anyRequest().authenticated())
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oauth2Login(login -> login.loginPage("/oauth2/authorization/msvc-usuarios-client"))
-        .oauth2Client(Customizer.withDefaults())
-        .csrf(AbstractHttpConfigurer::disable)
-        .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
+      http.authorizeHttpRequests(authorize -> authorize
+              .requestMatchers("/authorized", "/login", "/actuator/**").permitAll()
+              .requestMatchers(HttpMethod.GET, "/", "/{id}").hasAnyAuthority(SCOPE_WRITE, SCOPE_READ)
+              .requestMatchers(HttpMethod.POST, "/").hasAuthority(SCOPE_WRITE)
+              .requestMatchers(HttpMethod.PUT, "/{id}").hasAuthority(SCOPE_WRITE)
+              .requestMatchers(HttpMethod.DELETE, "/{id}").hasAuthority(SCOPE_WRITE)
+              .anyRequest().authenticated())
+              .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+              .oauth2Login(login -> login.loginPage("/oauth2/authorization/msvc-usuarios-client"))
+              .oauth2Client(Customizer.withDefaults())
+              .csrf(AbstractHttpConfigurer::disable)
+              .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
 
     return http.build();
   }

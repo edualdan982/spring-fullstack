@@ -80,7 +80,7 @@ public class SecurityConfig {
             .anyRequest().authenticated())
         // Form login handles the redirect to the login page from the
         // authorization server filter chain
-        .formLogin(Customizer.withDefaults());
+        .formLogin(Customizer.withDefaults()).csrf(csrf -> csrf.disable());
 
     return http.build();
   }
@@ -107,7 +107,7 @@ public class SecurityConfig {
     RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
         .clientId("usuarios-client")
         // .clientSecret("{noop}secret")
-         .clientSecret(passwordEncoder().encode("secret"))
+        .clientSecret(passwordEncoder().encode("secret"))
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
         .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
@@ -118,7 +118,7 @@ public class SecurityConfig {
         .scope(OidcScopes.PROFILE)
         .scope("read")
         .scope("write")
-        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+        .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
         .build();
 
     return new InMemoryRegisteredClientRepository(oidcClient);
